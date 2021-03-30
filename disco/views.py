@@ -1,8 +1,4 @@
 from datetime import timedelta, datetime
-
-from django.shortcuts import render
-
-# Create your views here.
 from django.utils.timezone import now
 
 from core import settings
@@ -25,3 +21,4 @@ def empty_trash(self, last_run, interval):
         date = datetime.now()
         model.objects.filter(pk__in=pks).update(hard_deleted=date)
     return did_work
+
