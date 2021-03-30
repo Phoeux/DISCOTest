@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.shortcuts import render
 
@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.utils.timezone import now
 
 from core import settings
+from disco.models import Track, Playlist, PlaylistVersion, TrackComment
 
 
 def empty_trash(self, last_run, interval):
@@ -21,5 +22,6 @@ def empty_trash(self, last_run, interval):
             .filter(deleted__lt=cutoff)\
             .values_list('pk',flat=True)[:settings.TRASH_BATCH_SIZE]
         did_work |= (pks.count() > 0)
-        model.objects.filter(pk__in=pks).delete()
+        date = datetime.now()
+        model.objects.filter(pk__in=pks).update(hard_deleted=date)
     return did_work
