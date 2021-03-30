@@ -15,3 +15,23 @@ class SoftDeleteMixin(models.Model):
 
     class Meta:
         abstract = True
+
+
+class Track(models.Model):
+    title = models.CharField(max_length=20)
+    track_comment = models.ForeignKey('TrackComment', on_delete=models.CASCADE, related_name='track')
+
+
+class Playlist(models.Model):
+    title = models.CharField(max_length=20)
+    number_of_tracks = models.PositiveIntegerField(default=0)
+    version = models.ForeignKey('PlaylistVersion', on_delete=models.CASCADE)
+
+
+class PlaylistVersion(models.Model):
+    version = models.FloatField(default=0)
+
+
+class TrackComment(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='track_comment')
+    text = models.TextField(max_length=250)
